@@ -23,8 +23,8 @@ export const BottomNav = ({ role = 'resident' }) => {
   return (
     <nav
       data-testid="bottom-nav"
-      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[440px] bg-cream hairline-t z-40"
-      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[440px] bg-cream hairline-t"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom)', zIndex: 10000 }}
     >
       <div className="flex items-stretch justify-around px-2 pt-2 pb-2">
         {items.map(({ to, label, Icon, id }) => (

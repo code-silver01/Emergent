@@ -82,7 +82,7 @@ export default function Onboard() {
       </div>
 
       {/* Input */}
-      <div className="hairline-t px-3 py-3 bg-cream">
+      <div className="hairline-t px-3 pt-3 bg-cream relative z-50" style={{ paddingBottom: 64 }}>
         {finished ? (
           <button
             data-testid="onboard-enter"

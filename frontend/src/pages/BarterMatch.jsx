@@ -82,7 +82,7 @@ export default function BarterMatch() {
       </div>
 
       {/* Footer */}
-      <div className="hairline-t bg-cream px-3 py-3">
+      <div className="hairline-t bg-cream px-3 pt-3 relative z-50" style={{ paddingBottom: 64 }}>
         {!confirmed ? (
           <>
             <button className="btn-rust w-full mb-2" onClick={confirm} data-testid="confirm-barter">
