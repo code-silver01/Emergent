@@ -1,0 +1,73 @@
+{
+  "summary": "Frontend-only testing for Mohalla app at mobile viewport 420x900. Ran end-to-end smoke through Splash → OTP → Onboard → Home (resident & gig) → Map filters → Node profile → Barter → BarterMatch confirm → Ledger → Alerts → Favours → Snapshot → Me → Reputation → Jobs. 23 of 24 functional checks passed. One CRITICAL UX bug identified: the 'Made with Emergent' badge in the bottom-right corner intercepts pointer events on bottom-right interactive elements at 420px viewport — specifically blocks the onboarding chat-send button. Real users on mobile will not be able to send messages or click the floating action area easily. The cosmetic minor issue is the Jobs accept history check (page text query may not have re-rendered in time).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "Onboard.jsx chat-send button",
+        "issue": "Bottom-right Emergent badge (anchor#emergent-badge) overlaps and intercepts pointer events on the chat-send button. Playwright reports '<p>Made with Emergent</p> subtree intercepts pointer events' on every retry. Even force=True click does not fire the React onClick — JS-dispatched click was required to progress through 3 chat exchanges. This affects real users on mobile too.",
+        "selector": "[data-testid='chat-send']",
+        "priority": "HIGH"
+      },
+      {
+        "component": "Bottom-right interactive area (global)",
+        "issue": "Any interactive element placed within roughly the bottom 60px on the right side of the 440px phone-shell may be partially obscured by the Emergent badge. Confirmed for onboarding chat-send. Likely also affects the rust 'send'/floating buttons elsewhere if any.",
+        "selector": "fixed bottom-right region",
+        "priority": "HIGH"
+      }
+    ],
+    "integration_issues": [
+      {
+        "flow": "Jobs Accept → History",
+        "issue": "After clicking accept-{jobId}, the page body innerText scan did not include 'History'/'Accepted' on first re-render in the test. Could be timing-related (state update vs evaluate timing) rather than a real bug. Worth manual re-verification.",
+        "affected_selectors": ["[data-testid^='accept-']"]
+      }
+    ],
+    "design_issues": [
+      {
+        "screen": "Onboard chat input row",
+        "issues": [
+          "Send button sits flush in the bottom-right corner — collides with the persistent 'Made with Emergent' badge. Need either right-padding on the input row OR position the send button higher / increase z-index above #emergent-badge."
+        ]
+      },
+      {
+        "screen": "Reputation",
+        "issues": [
+          "When the logged-in user is a resident (Aanya), /reputation renders the gig dashboard but the header reads 'Aanya's reputation' with Trust 34 — looks slightly inconsistent because the rest of the page (demand forecast, AC repair / Inverter wiring skill chips) is clearly gig-flavoured. Spec says /reputation renders the Gig dashboard regardless, so consider hiding from resident bottom nav or pulling identity from a gig profile when accessed by a resident."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Fix overlap between the onboarding chat-send button and the bottom-right Emergent badge. Easiest fix: add right padding (~56px) to the input row when on mobile, OR move the send button slightly above the bottom edge, OR raise the input row z-index above the badge so the badge is rendered behind. Verify that real touch events on iOS/Android can actually fire the React onClick.",
+    "Sanity-check all other bottom-right interactive elements at viewport 420x900 to make sure none are obscured by the Emergent badge.",
+    "Re-verify the Jobs Accept → History interaction manually (the testing flow used a JS dispatched click; the visible re-render did not appear within ~700ms)."
+  ],
+  "critical_code_review_comments": [
+    "Splash.jsx handleEnter: clearAll() is called every successful auth, which is correct for demo; however when role is switched via Me page (role-toggle) the user object is mutated but other state (acceptedJobs, postedBarters, confirmedBarters, reportedAlerts) is kept — confirm this is intentional. If you want a clean per-role demo, clear these on role toggle.",
+    "AppLayout.jsx: getUser() is read on every render but the value is fetched synchronously from localStorage — fine for this app size but worth memoising if it grows.",
+    "Onboard.jsx: step counter uses setStep(step+1) inside a setTimeout — closes over a stale `step` if user spams send. Minor; works in current test because send waits 600ms.",
+    "Jobs.jsx: statuses are kept in component state; once user navigates away, accepted/passed status is lost (not persisted in storage). Acceptable for demo but the spec says 'accepted jobs move to history' — currently the persistence is session-only.",
+    "All data-testid attributes referenced in the spec are present and correctly named. Good coverage."
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "N/A (frontend only)",
+    "frontend": "96% (23/24 checks)"
+  },
+  "test_credentials": "N/A — OTP mocked, any 10-digit phone + any 6-digit OTP accepted.",
+  "seed_data_creation": "None. Pure localStorage demo seeded by /app/frontend/src/lib/mockData.js.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Use viewport 420x900 to match phone-shell. The Emergent badge at bottom-right intercepts clicks on bottom-right buttons — when testing with Playwright, use JS-dispatched clicks (page.evaluate document.querySelector(...).click()) instead of page.click() to avoid the overlay. Auth flow: enter any 10 digits in phone-input → enter-btn → any 6 digits in otp-input → enter-btn → redirects to /onboard. Gig role: toggle gig-toggle on splash BEFORE entering OTP. Onboard requires 3 send actions before the onboard-enter button appears.",
+  "rca_of_the_issue": {
+    "bug": "Onboarding chat-send button is blocked by the global 'Made with Emergent' floating badge.",
+    "reproduction": "1) Open the app on a 420px-wide mobile viewport. 2) Enter any 10 digits, click 'Enter Mohalla'. 3) Enter any 6-digit OTP, click 'Enter Mohalla'. 4) On /onboard, type any text in the chat input and click the rust send button at bottom-right. The click hits the Emergent badge instead and the message is never sent.",
+    "rootCause": "The anchor#emergent-badge is rendered with very high effective stacking and is positioned at bottom-right. The Onboard input row's send button shares the same coordinates. Playwright explicitly reports: 'Made with Emergent subtree intercepts pointer events'. Browsers (and real touches) will follow the same z-order rules.",
+    "mitigation": "Add right padding to the input row on the Onboard screen, or move the send button up by ~20-30px on mobile, or set position:relative + z-index:9999 on the input row so it sits above #emergent-badge. After fix, verify with a real click (no force=True) at viewport 420x900."
+  }
+}
