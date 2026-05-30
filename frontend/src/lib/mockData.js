@@ -1,49 +1,96 @@
-// All mock seed data for Mohalla
-export const SEED_NODES = [
-  {
-    id: 'n1',
+// Mohalla — all hardcoded mock data for the Aditya → Sunita demo flow
+
+export const USERS = {
+  aditya: {
+    id: 'aditya',
+    name: 'Aditya',
+    phone: '9900112233',
+    flat: 'Flat 504',
+    building: 'Srinivasa Apartments',
+    neighbourhood: 'Koramangala',
+    role: 'both',
+    isNewResident: true,
+    movedInDaysAgo: 1,
+    coins: 0,
+    trustScore: 0,
+    onboarded: false
+  },
+  sunita: {
+    id: 'sunita',
     name: 'Sunita',
-    title: 'Sunita Aunty',
+    phone: '9845501234',
+    flat: 'Flat 403',
+    building: 'Srinivasa Apartments',
+    neighbourhood: 'Koramangala',
+    role: 'gig',
+    inviteCode: 'MOH-7X2K',
+    invitedBy: 'aditya',
+    shadowMentions: 5,
+    shadowCategory: 'Home tiffin',
+    coins: 0,
+    trustScore: 61,
+    onboarded: false,
+    claimedProfile: false
+  }
+};
+
+// Ghost economy nodes — mix of shadow + claimed
+export const NODES = [
+  {
+    id: 'sunita',
+    name: 'Sunita',
+    title: 'Sunita',
     category: 'food',
-    flat: 'B-204, Sai Heritage',
-    location: 'Koramangala 4th Block',
-    trustScore: 86,
-    mentions: 23,
+    flat: 'Flat 403',
+    building: 'Srinivasa Apartments',
+    location: 'Block B',
+    trustScore: 61,
+    mentions: 5,
     available: true,
-    aiInferredNote: 'AI inferred unavailable 12–18 Dec — mentioned daughter\'s visit in chat',
-    skills: ['North Indian tiffin', 'Sunday Pulao', 'Pickle hampers'],
-    coinValuePerHr: 40,
-    color: 'moss',
-    pos: { x: 28, y: 22 },
+    status: 'shadow', // becomes 'claimed' after Sunita onboards
+    shadowLabel: 'Frequently recommended home tiffin in Block B',
+    aiInferredNote: 'Available most evenings. Mentioned she\'s away 12–18 Dec.',
+    skills: ['Home tiffin', 'South Indian', 'Lunch & dinner'],
+    coinValuePerHr: 25,
+    pos: { x: 22, y: 30 },
+    emoji: '🍱',
     quotes: [
-      'Sunita aunty\'s phulkas saved my Mondays — Resident, Flat A-302',
-      'Her pickle is honestly better than the brands — Resident, Flat C-110',
-      'Best tiffin in 4th block, no debate — Resident, Flat B-507'
-    ]
+      'Resident in Flat 302: "Best home food I\'ve had since moving here."',
+      'Resident in Flat 107: "Very reliable, never missed a delivery."',
+      'Watchman Suresh: "She feeds half the building."'
+    ],
+    evidence: {
+      households: 5,
+      months: 3,
+      disputes: 0,
+      verifiedBy: 'Watchman Suresh'
+    }
   },
   {
-    id: 'n2',
+    id: 'venkat',
     name: 'Venkat',
-    title: 'Venkat Anna',
+    title: 'Venkat',
     category: 'repair',
     flat: 'D-12, Workshop lane',
     location: 'Behind 80ft road',
     trustScore: 74,
     mentions: 17,
     available: true,
-    aiInferredNote: 'AI inferred high availability — usually replies within 12 min on weekday mornings',
+    status: 'claimed',
+    aiInferredNote: 'Replies within 12 min on weekday mornings.',
     skills: ['AC servicing', 'Inverter repair', 'Geyser fix'],
     coinValuePerHr: 60,
-    color: 'gold',
-    pos: { x: 62, y: 36 },
+    pos: { x: 70, y: 22 },
+    emoji: '⚙️',
     quotes: [
-      'Venkat fixed my 9-year-old AC for ₹600. Brand guy quoted ₹4200 — Resident, Flat F-201',
-      'Honest, no upsell — Resident, Flat A-104',
-      'He once refused payment because the fix was 2 minutes — Resident, Flat B-303'
-    ]
+      'Resident, Flat F-201: "Fixed my 9-year-old AC for ₹600. Brand quoted ₹4,200."',
+      'Resident, Flat A-104: "Honest, no upsell."',
+      'Resident, Flat B-303: "Refused payment once because fix took 2 minutes."'
+    ],
+    evidence: { households: 12, months: 14, disputes: 0 }
   },
   {
-    id: 'n3',
+    id: 'priya',
     name: 'Priya',
     title: 'Priya',
     category: 'design',
@@ -52,38 +99,42 @@ export const SEED_NODES = [
     trustScore: 68,
     mentions: 9,
     available: true,
-    aiInferredNote: 'AI inferred — freelance designer, prefers barter for home services over cash',
+    status: 'claimed',
+    aiInferredNote: 'Prefers barter for home services over cash.',
     skills: ['Logo design', 'Wedding invites', 'Instagram reels'],
     coinValuePerHr: 80,
-    color: 'purple',
-    pos: { x: 78, y: 64 },
+    pos: { x: 80, y: 56 },
+    emoji: '✏️',
     quotes: [
-      'Did my mom\'s 60th invite in 2 days — Resident, Flat F-203',
-      'Charges fair, doesn\'t ghost — Resident, Flat E-507'
-    ]
+      'Resident, Flat F-203: "Did my mom\'s 60th invite in 2 days."',
+      'Resident, Flat E-507: "Charges fair, doesn\'t ghost."'
+    ],
+    evidence: { households: 7, months: 8, disputes: 0 }
   },
   {
-    id: 'n4',
+    id: 'arjun',
     name: 'Arjun',
-    title: 'Arjun Sir',
+    title: 'Arjun',
     category: 'tutor',
     flat: 'A-302, Sai Heritage',
     location: 'Koramangala 4th Block',
     trustScore: 81,
     mentions: 14,
     available: false,
-    aiInferredNote: 'AI inferred unavailable till March — mentioned board exam season in WhatsApp group',
+    status: 'claimed',
+    aiInferredNote: 'Unavailable till March — board exam season.',
     skills: ['Class 9–10 Math', 'CBSE Physics', 'Olympiad prep'],
     coinValuePerHr: 50,
-    color: 'sky',
-    pos: { x: 18, y: 58 },
+    pos: { x: 18, y: 64 },
+    emoji: '📐',
     quotes: [
-      'My son went from 62 to 88 in Math — Resident, Flat B-204',
-      'Patient with slow learners — Resident, Flat C-301'
-    ]
+      'Resident, Flat B-204: "My son went from 62 to 88 in Math."',
+      'Resident, Flat C-301: "Patient with slow learners."'
+    ],
+    evidence: { households: 9, months: 18, disputes: 0 }
   },
   {
-    id: 'n5',
+    id: 'kavitha',
     name: 'Kavitha',
     title: 'Kavitha',
     category: 'tailor',
@@ -92,96 +143,99 @@ export const SEED_NODES = [
     trustScore: 71,
     mentions: 11,
     available: true,
-    aiInferredNote: 'AI inferred — slowest queues on Tuesdays. Festival weeks = 4-day backlog',
+    status: 'claimed',
+    aiInferredNote: 'Festival weeks = 4-day backlog. Tuesdays quietest.',
     skills: ['Blouse stitching', 'Alterations', 'Saree fall picot'],
     coinValuePerHr: 35,
-    color: 'moss',
-    pos: { x: 46, y: 76 },
+    pos: { x: 50, y: 80 },
+    emoji: '🪡',
     quotes: [
-      'Got my mom\'s old saree turned into a kurta — Resident, Flat G-104',
-      'Quick, neat finishing — Resident, Flat A-211'
-    ]
+      'Resident, Flat G-104: "Turned my mom\'s old saree into a kurta."',
+      'Resident, Flat A-211: "Quick, neat finishing."'
+    ],
+    evidence: { households: 8, months: 11, disputes: 0 }
   },
   {
-    id: 'n6',
+    id: 'raju',
     name: 'Raju',
-    title: 'Raju Bhai',
+    title: 'Raju',
     category: 'vehicle',
     flat: 'Garage near 7th cross',
     location: 'Koramangala 1st Block',
     trustScore: 79,
     mentions: 19,
     available: true,
-    aiInferredNote: 'AI inferred — best for two-wheelers. Refuses jobs he can\'t finish in a day',
+    status: 'claimed',
+    aiInferredNote: 'Refuses jobs he can\'t finish in a day.',
     skills: ['Bike servicing', 'Puncture', 'Clutch plate'],
     coinValuePerHr: 45,
-    color: 'rust',
-    pos: { x: 52, y: 14 },
+    pos: { x: 80, y: 80 },
+    emoji: '🔧',
     quotes: [
-      'Diagnosed my Activa in 4 mins, fixed in 20 — Resident, Flat D-507',
-      'Doesn\'t overcharge women riders — Resident, Flat B-104'
-    ]
+      'Resident, Flat D-507: "Diagnosed my Activa in 4 mins, fixed in 20."',
+      'Resident, Flat B-104: "Doesn\'t overcharge women riders."'
+    ],
+    evidence: { households: 14, months: 22, disputes: 0 }
   }
 ];
 
 export const CATEGORY_META = {
-  food: { label: 'Food', color: '#3d6b3e', icon: 'soup' },
-  repair: { label: 'Repair', color: '#b8860b', icon: 'tool' },
-  design: { label: 'Design', color: '#534ab7', icon: 'palette' },
-  tutor: { label: 'Tutor', color: '#2a5f8a', icon: 'book' },
-  tailor: { label: 'Tailor', color: '#5a9b5c', icon: 'scissors' },
-  vehicle: { label: 'Vehicles', color: '#c4511a', icon: 'motor' }
+  food: { label: 'Food', color: '#3d6b3e', emoji: '🍱' },
+  repair: { label: 'Repair', color: '#7a5c1e', emoji: '⚙️' },
+  design: { label: 'Design', color: '#4a3d9e', emoji: '✏️' },
+  tutor: { label: 'Tutor', color: '#1e4f78', emoji: '📐' },
+  tailor: { label: 'Tailoring', color: '#7a1e4f', emoji: '🪡' },
+  vehicle: { label: 'Vehicles', color: '#bf4e1e', emoji: '🔧' },
+  resource: { label: 'Resources', color: '#3d3022', emoji: '📦' }
 };
 
-export const SEED_BARTERS = [
+// Resources layer — objects/knowledge, not people
+export const RESOURCES = [
+  { id: 'r1', emoji: '🪜', label: 'Ladder', flat: 'Flat 201', pos: { x: 35, y: 50 } },
+  { id: 'r2', emoji: '🔩', label: 'Drill', flat: 'Flat 406', pos: { x: 60, y: 70 } },
+  { id: 'r3', emoji: '🚗', label: 'Carpool E.City Wed/Fri', flat: 'Flat 308', pos: { x: 42, y: 18 } }
+];
+
+export const BARTERS = [
   {
     id: 'b1',
-    userId: 'u_priya',
     name: 'Priya',
     flat: 'F-501',
-    offers: 'Logo + 5 Instagram reels',
-    wants: 'Home-cooked lunches for 2 weeks',
+    offers: '1 logo design + 5 Instagram reels',
+    wants: 'Home-cooked lunches, 2 weeks',
     matchScore: 'very_high',
-    aiNote: 'You\'ve ordered Swiggy 3 nights this week. Priya\'s mum is hosting next week and wants a break from cooking. Perfect double-coincidence.'
+    coinSuggestion: '2 hrs design ≈ 14 meals',
+    aiContext: 'You\'ve ordered Swiggy 3 nights running. Priya\'s mum is visiting and wants a break from cooking. Clean swap — no money needed.',
+    aiSource: 'your delivery history + Priya\'s last status update'
   },
   {
     id: 'b2',
-    userId: 'u_arjun',
     name: 'Arjun',
     flat: 'A-302',
-    offers: 'Math tuition for Class 9 (3 sessions)',
-    wants: 'Help with WordPress blog setup',
+    offers: 'Class 9 Math tuition (3 sessions)',
+    wants: 'WordPress blog setup',
     matchScore: 'high',
-    aiNote: 'You set up 4 WordPress sites last year (we pulled this from your Reddit). Arjun\'s daughter is in Class 9 — would your kid benefit?'
-  },
-  {
-    id: 'b3',
-    userId: 'u_kavitha',
-    name: 'Kavitha',
-    flat: 'Shop 3',
-    offers: 'Blouse stitching + 2 alterations',
-    wants: 'Diwali rangoli design templates',
-    matchScore: 'medium',
-    aiNote: 'You bookmarked 12 rangoli pins on Pinterest in October. Suspicious 😄'
+    coinSuggestion: '3 tuition sessions ≈ 1 day of dev work',
+    aiContext: 'You set up 4 WordPress sites last year. Arjun\'s daughter is in Class 9 — useful if your kid is in school.',
+    aiSource: 'your past projects'
   }
 ];
 
-export const SEED_3WAY = {
-  id: 'b3way',
+export const THREE_WAY = {
   chain: ['You', 'Arjun', 'Sunita', 'You'],
-  description: 'You teach Arjun WordPress → Arjun tutors Sunita\'s son in Math → Sunita sends you tiffin for a week.',
+  description: 'You teach Arjun WordPress → Arjun tutors Sunita\'s son → Sunita sends you tiffin for a week.',
   coinDelta: 0
 };
 
-export const SEED_ALERTS = [
+export const ALERTS = [
   {
     id: 'a1',
     type: 'Fake BESCOM inspector',
-    description: 'Man in BESCOM uniform asking for ₹1500 cash for "meter recalibration". 3 reports today.',
-    aiNote: 'BESCOM never collects cash at home. They send paper notices. This is the 4th repeat scam this month.',
-    reportCount: 3,
+    description: 'Claiming to update meter records, asking ₹500. Do NOT pay.',
+    aiNote: 'BESCOM never collects cash at home. This is a known pattern — 4 buildings affected this week.',
+    reportCount: 4,
     status: 'active',
-    timestamp: '2h ago'
+    timestamp: 'First seen 2 days ago'
   },
   {
     id: 'a2',
@@ -190,103 +244,82 @@ export const SEED_ALERTS = [
     aiNote: 'Banks never use shortened URLs. Forward to 1909 (DoT spam) and delete.',
     reportCount: 2,
     status: 'active',
-    timestamp: '5h ago'
+    timestamp: '5 hours ago'
   },
   {
     id: 'a3',
     type: 'Fake gas leak service',
-    description: 'Caller offered "free gas pipe safety check", then quoted ₹4,200 for fake parts.',
-    aiNote: 'Resolved — caller blocked after 11 reports. Last seen 6 days ago.',
+    description: 'Door-to-door caller offering "free safety check", then quoting ₹4,200 for fake parts.',
+    aiNote: 'Blocked after 11 reports. Last seen 6 days ago.',
     reportCount: 11,
     status: 'resolved',
-    timestamp: '6d ago'
+    timestamp: 'Resolved 3 days ago'
   }
 ];
 
-export const SEED_FAVOURS = [
+export const FAVOURS = [
   {
     id: 'f1',
     needed: 'Borrow a power drill for 30 mins (mounting a curtain rod)',
-    flat: 'C-507',
-    aiMatchReason: 'AI matched you because you bought a Bosch drill in Aug and haven\'t used it in 4 months.',
-    coinReward: 8
+    flat: 'Flat 203',
+    askedAgo: '1 hr ago',
+    aiReason: 'You mentioned having a drill unused.',
+    coinReward: 5
   },
   {
     id: 'f2',
-    needed: 'Pick up parcel from gate 3 (I\'m stuck at office till 8)',
-    flat: 'A-104',
-    aiMatchReason: 'AI matched you because you usually walk past gate 3 around 7:15pm.',
-    coinReward: 5
+    needed: 'Pick up parcel from gate 3 (stuck at office till 8pm)',
+    flat: 'Flat 104',
+    askedAgo: '20 min ago',
+    aiReason: 'You usually walk past gate 3 around 7:15pm.',
+    coinReward: 3
   }
 ];
 
-export const SEED_JOBS = [
+export const JOBS = [
   {
     id: 'j1',
     requester: 'Anita',
-    requesterFlat: 'B-507',
+    requesterFlat: 'Flat B-507',
     jobType: 'AC stopped cooling — split unit, 1.5 ton',
     urgency: 'Today',
-    foundVia: 'via 7 community mentions over 4 months',
+    foundVia: '7 community mentions over 4 months',
     status: 'pending'
   },
   {
     id: 'j2',
     requester: 'Rohan',
-    requesterFlat: 'F-203',
-    jobType: 'Geyser making noise + low pressure',
+    requesterFlat: 'Flat F-203',
+    jobType: 'Geyser noise + low pressure',
     urgency: 'This week',
-    foundVia: 'via building WhatsApp group (Sunita Aunty recommended you)',
-    status: 'pending'
-  },
-  {
-    id: 'j3',
-    requester: 'Meera',
-    requesterFlat: 'D-105',
-    jobType: 'Inverter battery replacement',
-    urgency: 'Flexible',
-    foundVia: 'via 3 mentions in last 2 weeks',
+    foundVia: 'WhatsApp group · Sunita Aunty recommended you',
     status: 'pending'
   }
 ];
 
-export const SEED_CONTRIBUTIONS = [
-  { id: 'c1', description: 'Reported fake BESCOM scam — 3 neighbours protected', coins: 15, timestamp: '2h ago', sign: '+' },
-  { id: 'c2', description: 'Lent power drill to flat A-104', coins: 8, timestamp: 'Yesterday', sign: '+' },
-  { id: 'c3', description: 'Picked up parcel for elderly neighbour (3F)', coins: 5, timestamp: '2d ago', sign: '+' },
-  { id: 'c4', description: 'Tagged Venkat in AC repair recommendation', coins: 3, timestamp: '3d ago', sign: '+' },
-  { id: 'c5', description: 'Barter debt — Sunita tiffin (3 days)', coins: 12, timestamp: '4d ago', sign: '-' },
-  { id: 'c6', description: 'Hosted neighbourhood plant swap', coins: 20, timestamp: 'Last week', sign: '+' }
-];
-
 export const DEMAND_FORECAST = [
-  { day: 'Mon', value: 30, high: false },
-  { day: 'Tue', value: 22, high: false },
-  { day: 'Wed', value: 45, high: false },
-  { day: 'Thu', value: 92, high: true },
-  { day: 'Fri', value: 88, high: true },
-  { day: 'Sat', value: 64, high: false },
-  { day: 'Sun', value: 40, high: false }
+  { day: 'Mon', value: 25, high: false },
+  { day: 'Tue', value: 18, high: false },
+  { day: 'Wed', value: 42, high: false },
+  { day: 'Thu', value: 88, high: true },
+  { day: 'Fri', value: 92, high: true },
+  { day: 'Sat', value: 60, high: false },
+  { day: 'Sun', value: 35, high: false }
 ];
 
-export const LORE_SNIPPETS = [
-  'Koramangala was a paddy field until 1978. The lake behind 5th block was a quarry, then a dump, then reborn in 2017.',
-  'The banyan on 80ft road is older than the road. Locals still tie threads on it during Aadi.',
-  'Sony World junction used to be a single petrol pump and a sugarcane juice cart in 1992.'
+export const DAY1_BRIEF = [
+  { emoji: '🕖', text: 'Water supply cuts at 7am sharp. Fill by 6:50.' },
+  { emoji: '🔧', text: 'Best plumber: Ramesh (8 trust pts). Call before 9am.' },
+  { emoji: '🍱', text: 'Home tiffin: someone in Block B, ₹80/meal. 5 mentions.' },
+  { emoji: '⚠️', text: 'Active scam: fake BESCOM inspector, 4 reports this week.' },
+  { emoji: '💬', text: '34 neighbours are on Mohalla here.' }
 ];
 
-export const ONBOARD_BRIEF = {
-  resident: [
-    '🚰 Water comes Tue/Thu/Sat between 6–8am. Sump fills in 22 min, on average.',
-    '🔧 Best plumber within 800m: Venkat (74 trust). Charges 30% below market.',
-    '⚠ Active scam: fake BESCOM inspector — 3 reports in last 4 hours.',
-    '🍱 Top tiffin: Sunita Aunty (86 trust, 23 mentions). ₹120/meal, North Indian.'
-  ]
-};
-
-export const COIN_USES = [
-  'Barter credits — settle uneven trades without cash',
-  'Credibility badge — unlocks gig worker visibility boost',
-  'Ghost node unlocks — see hidden nodes 2km out',
-  'Donate to neighbourhood fund — civic projects'
+export const COLD_START_DATA = [
+  { emoji: '⚡', label: 'BESCOM schedule', detail: 'Power maintenance Mon 11am–2pm' },
+  { emoji: '💧', label: 'Water supply', detail: 'Tue/Thu/Sat 6–8am' },
+  { emoji: '🗑️', label: 'Garbage', detail: 'Wet: daily 7am. Dry: Wed/Sat' },
+  { emoji: '🚕', label: 'Auto stand', detail: '5th cross, 120m east' }
 ];
+
+export const LORE = 'The chai stall at the corner of 5th Cross has been run by the same family since 1983. The current owner\'s father served the first cup the year this building was constructed.';

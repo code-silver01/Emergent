@@ -1,67 +1,88 @@
 import React from 'react';
 import { IconAlertTriangleFilled, IconSparkles, IconShieldCheck } from '@tabler/icons-react';
 import PageHeader from '../components/PageHeader';
-import { SEED_ALERTS } from '../lib/mockData';
+import { ALERTS } from '../lib/mockData';
 
 export default function Alerts() {
-  const active = SEED_ALERTS.filter(a => a.status === 'active');
-  const resolved = SEED_ALERTS.filter(a => a.status === 'resolved');
+  const active = ALERTS.filter(a => a.status === 'active');
+  const resolved = ALERTS.filter(a => a.status === 'resolved');
 
   return (
-    <div className="bg-cream min-h-screen" data-testid="alerts-screen">
-      <PageHeader variant="ink" title="Scam radar" subtitle="What's making rounds in your area" back />
+    <div className="bg-cream" style={{ minHeight: '100vh' }} data-testid="alerts-screen">
+      <PageHeader variant="alert" title="Scam radar" subtitle="Neighbourhood immune system" back showCoins={false} right={<span className="pill" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', fontSize: 11, padding: '3px 9px' }}>{active.length} active</span>} />
 
-      {/* Active alerts */}
       <section className="px-5 pt-5">
-        <div className="eyebrow" style={{ color: 'var(--alert)' }}>Active · in your area</div>
-        <div className="mt-3 space-y-3" data-testid="active-alerts">
-          {active.map((a) => (
+        <div className="eyebrow" style={{ color: 'var(--alert)' }}>Active</div>
+        <div className="mt-3 space-y-3 stagger">
+          {active.map(a => (
             <div
               key={a.id}
-              className="card-cream p-4"
-              style={{ borderLeft: '3px solid var(--alert)' }}
+              className="card-white bl-alert"
               data-testid={`alert-${a.id}`}
             >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <IconAlertTriangleFilled size={14} color="var(--alert)" />
-                    <span className="font-display-i text-[16px]" style={{ color: 'var(--ink)' }}>{a.type}</span>
+              <div className="flex items-start gap-2">
+                <span className="pulse-dot mt-1" style={{ color: 'var(--alert)' }} />
+                <div className="flex-1">
+                  <div className="font-ui" style={{ fontSize: 15, fontWeight: 600, color: 'var(--ink)' }}>{a.type}</div>
+                  <p className="font-ui mt-1" style={{ fontSize: 12.5, color: 'var(--ink2)', lineHeight: 1.5 }}>{a.description}</p>
+                  <div
+                    className="mt-2.5 pt-2 flex items-start gap-1.5"
+                    style={{ borderTop: '1px solid var(--sand3)' }}
+                  >
+                    <IconSparkles size={11} color="var(--moss)" />
+                    <p className="font-ui" style={{ fontSize: 11.5, color: 'var(--ink3)', fontStyle: 'italic' }}>{a.aiNote}</p>
                   </div>
-                  <p className="mt-1.5 text-[13px] font-ui" style={{ color: 'var(--ink2)' }}>{a.description}</p>
+                  <div className="mt-2 flex items-center justify-between">
+                    <span className="font-ui" style={{ fontSize: 10.5, color: 'var(--ink3)' }}>
+                      {a.reportCount} reports · {a.timestamp}
+                    </span>
+                    <button
+                      className="pill"
+                      data-testid={`saw-${a.id}`}
+                      style={{
+                        background: 'transparent',
+                        border: '1px solid var(--alert)',
+                        color: 'var(--alert)',
+                        padding: '3px 10px',
+                        fontSize: 11,
+                        fontWeight: 500
+                      }}
+                    >
+                      I saw this too
+                    </button>
+                  </div>
                 </div>
-                <span className="pill shrink-0" style={{ background: 'rgba(192,57,43,0.12)', color: 'var(--alert)' }}>
-                  {a.reportCount} reports
-                </span>
               </div>
-              <div className="mt-3 hairline-t pt-2.5 flex items-start gap-1.5">
-                <IconSparkles size={11} color="var(--moss)" />
-                <p className="text-[11.5px]" style={{ color: 'var(--ink2)' }}>{a.aiNote}</p>
-              </div>
-              <div className="text-[10.5px] mt-2" style={{ color: 'var(--ink2)' }}>{a.timestamp}</div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Resolved */}
       <section className="px-5 mt-6">
         <div className="eyebrow">Resolved</div>
-        <div className="mt-3 space-y-2" data-testid="resolved-alerts">
-          {resolved.map((a) => (
-            <div key={a.id} className="card-cream p-3 opacity-60" data-testid={`resolved-${a.id}`}>
+        <div className="mt-3 space-y-2">
+          {resolved.map(a => (
+            <div key={a.id} className="card opacity-70" data-testid={`resolved-${a.id}`}>
               <div className="flex items-center gap-1.5">
                 <IconShieldCheck size={13} color="var(--moss)" />
-                <span className="font-ui text-[13px] line-through decoration-1" style={{ color: 'var(--ink2)' }}>{a.type}</span>
+                <span
+                  className="font-ui"
+                  style={{ fontSize: 13, color: 'var(--ink3)', textDecoration: 'line-through' }}
+                >
+                  {a.type}
+                </span>
               </div>
-              <p className="text-[11.5px] mt-1" style={{ color: 'var(--ink2)' }}>{a.aiNote}</p>
+              <p className="font-ui mt-1" style={{ fontSize: 11.5, color: 'var(--ink3)', fontStyle: 'italic' }}>{a.aiNote}</p>
+              <div className="font-ui mt-1" style={{ fontSize: 10.5, color: 'var(--ink3)' }}>{a.timestamp}</div>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="px-5 mt-7 mb-10">
-        <button className="btn-outline w-full" data-testid="report-btn">Report suspicious activity</button>
+      <section className="px-5 mt-6 mb-10">
+        <button data-testid="report-btn" className="btn btn-outline w-full" style={{ borderColor: 'var(--rust)', color: 'var(--rust)', height: 46 }}>
+          Report something suspicious
+        </button>
       </section>
     </div>
   );

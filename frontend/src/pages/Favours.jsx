@@ -1,44 +1,57 @@
 import React from 'react';
-import { IconSparkles, IconHexagon } from '@tabler/icons-react';
+import { IconHexagon, IconSparkles } from '@tabler/icons-react';
 import PageHeader from '../components/PageHeader';
-import { SEED_FAVOURS } from '../lib/mockData';
+import { FAVOURS } from '../lib/mockData';
 
 export default function Favours() {
   return (
-    <div className="bg-cream min-h-screen" data-testid="favours-screen">
-      <PageHeader variant="ink" title="Favour board" subtitle="Tiny help, big trust" back />
+    <div className="bg-cream" style={{ minHeight: '100vh' }} data-testid="favours">
+      <PageHeader variant="ink" title="Favour board" subtitle="AI-matched to you specifically — not broadcast" back />
 
-      <section className="px-5 pt-5">
-        <div className="eyebrow">Matched personally to you</div>
-        <div className="mt-3 space-y-3" data-testid="favours-list">
-          {SEED_FAVOURS.map((f) => (
-            <div key={f.id} className="card-cream p-4" data-testid={`favour-${f.id}`}>
-              <div className="flex items-start justify-between gap-2">
-                <div className="flex-1">
-                  <div className="font-display-i text-[16px]" style={{ color: 'var(--ink)' }}>
-                    {f.needed}
-                  </div>
-                  <div className="text-[12px] mt-0.5" style={{ color: 'var(--ink2)' }}>Flat {f.flat}</div>
-                </div>
-                <span className="coin-badge shrink-0">
-                  <IconHexagon size={11} stroke={2} color="var(--gold2)" />
-                  +{f.coinReward}
-                </span>
+      <section className="px-5 pt-5 space-y-3 stagger">
+        {FAVOURS.map(f => (
+          <div key={f.id} className="card-white" data-testid={`favour-${f.id}`}>
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1">
+                <p className="font-ui" style={{ fontSize: 14, fontWeight: 500, color: 'var(--ink)', lineHeight: 1.45 }}>
+                  {f.needed}
+                </p>
+                <p className="font-ui mt-1" style={{ fontSize: 11.5, color: 'var(--ink3)' }}>
+                  {f.flat} · Asked {f.askedAgo}
+                </p>
               </div>
-              <div className="mt-3 p-2.5 rounded-[8px] flex items-start gap-1.5" style={{ background: 'var(--sand2)' }}>
-                <IconSparkles size={12} color="var(--moss)" />
-                <p className="text-[12px]" style={{ color: 'var(--ink)' }}>{f.aiMatchReason}</p>
-              </div>
-              <button className="btn-rust mt-3 w-full py-2.5 text-[13px]" data-testid={`help-${f.id}`}>
-                I'll help
-              </button>
+              <span className="coin-badge" style={{ flexShrink: 0 }}>
+                <IconHexagon size={11} stroke={2} color="var(--gold2)" />
+                +{f.coinReward}
+              </span>
             </div>
-          ))}
-        </div>
+            <div
+              className="mt-3 px-2.5 py-2 flex items-start gap-1.5"
+              style={{ background: 'var(--sand2)', borderRadius: 8 }}
+            >
+              <IconSparkles size={11} color="var(--moss)" />
+              <p className="font-ui" style={{ fontSize: 11.5, color: 'var(--ink2)' }}>{f.aiReason}</p>
+            </div>
+            <button
+              data-testid={`help-${f.id}`}
+              className="btn btn-moss mt-3"
+              style={{ height: 38, padding: '0 18px', fontSize: 13 }}
+            >
+              Help out
+            </button>
+          </div>
+        ))}
       </section>
 
-      <section className="px-5 mt-8 mb-10">
-        <p className="text-[11.5px] text-center" style={{ color: 'var(--ink2)' }}>
+      <section className="px-5 mt-6 mb-10">
+        <button
+          className="btn btn-outline w-full"
+          style={{ height: 46 }}
+          data-testid="post-favour"
+        >
+          I need something →
+        </button>
+        <p className="font-ui text-center mt-3" style={{ fontSize: 10.5, color: 'var(--ink3)', fontStyle: 'italic' }}>
           You only see this because AI matched you specifically — no broadcasting.
         </p>
       </section>

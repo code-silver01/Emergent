@@ -3,7 +3,11 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 
 import Splash from './pages/Splash';
-import Onboard from './pages/Onboard';
+import Otp from './pages/Otp';
+import RoleSelect from './pages/RoleSelect';
+import InviteClaim from './pages/InviteClaim';
+import OnboardResident from './pages/OnboardResident';
+import OnboardGig from './pages/OnboardGig';
 import Home from './pages/Home';
 import MapPage from './pages/Map';
 import NodeProfile from './pages/NodeProfile';
@@ -18,20 +22,24 @@ import Me from './pages/Me';
 import Snapshot from './pages/Snapshot';
 import AppLayout from './components/AppLayout';
 
-function App() {
+export default function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Splash />} />
-          <Route path="/onboard" element={<Onboard />} />
+          <Route path="/otp" element={<Otp />} />
+          <Route path="/role" element={<RoleSelect />} />
+          <Route path="/invite/:code" element={<InviteClaim />} />
+          <Route path="/onboard/resident" element={<OnboardResident />} />
+          <Route path="/onboard/gig" element={<OnboardGig />} />
           <Route element={<AppLayout />}>
             <Route path="/home" element={<Home />} />
             <Route path="/map" element={<MapPage />} />
             <Route path="/map/:nodeId" element={<NodeProfile />} />
             <Route path="/barter" element={<Barter />} />
-            <Route path="/barter/match/:id" element={<BarterMatch />} />
-            <Route path="/barter/ledger" element={<Ledger />} />
+            <Route path="/barter/:matchId" element={<BarterMatch />} />
+            <Route path="/ledger" element={<Ledger />} />
             <Route path="/alerts" element={<Alerts />} />
             <Route path="/favours" element={<Favours />} />
             <Route path="/reputation" element={<Reputation />} />
@@ -44,5 +52,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

@@ -1,113 +1,153 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { IconSparkles, IconPlus } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
+import { IconArrowsExchange2, IconSparkles, IconPlus } from '@tabler/icons-react';
 import PageHeader from '../components/PageHeader';
-import { SEED_BARTERS, SEED_3WAY } from '../lib/mockData';
-import { getUser } from '../lib/storage';
+import { BARTERS, THREE_WAY } from '../lib/mockData';
+import { loadUser, loadDemo } from '../lib/storage';
 
-const SCORE_LABEL = { very_high: 'Very high', high: 'High', medium: 'Medium' };
-const SCORE_COLOR = { very_high: 'var(--moss)', high: 'var(--sky)', medium: 'var(--gold)' };
+const SCORE_LABEL = { very_high: 'Very high match', high: 'High match', medium: 'Medium' };
+const SCORE_BG = { very_high: 'var(--moss3)', high: 'var(--sky2)', medium: 'var(--gold3)' };
+const SCORE_FG = { very_high: 'var(--moss)', high: 'var(--sky)', medium: 'var(--gold)' };
 
 export default function Barter() {
-  const user = getUser();
+  const user = loadUser();
+  const demo = loadDemo();
   const nav = useNavigate();
-  const balance = 'Fair';
+  const coins = user?.id === 'aditya' ? demo.adityaCoins : (user?.coins ?? 0);
+
   return (
-    <div className="bg-cream min-h-screen" data-testid="barter-board">
+    <div className="bg-cream" style={{ minHeight: '100vh' }} data-testid="barter-screen">
       <PageHeader variant="dark-warm" title="Barter board" subtitle="Trade time, skills, things — without cash" />
 
-      {/* 3 stat row */}
-      <section className="px-5 -mt-2">
-        <div className="grid grid-cols-3 gap-2">
-          <Stat label="Your coins" value={user?.coins ?? 0} accent="gold" />
-          <Stat label="Active matches" value={SEED_BARTERS.length} />
-          <Stat label="Balance" value={balance} accent="moss" />
+      {/* 3-stat strip */}
+      <section className="px-5 -mt-1">
+        <div
+          className="flex items-stretch"
+          style={{
+            background: 'var(--sand2)',
+            border: '1px solid var(--sand3)',
+            borderRadius: 'var(--radius)',
+            padding: '10px 0'
+          }}
+          data-testid="stat-strip"
+        >
+          <Strip label="Your coins" value={coins} />
+          <Sep />
+          <Strip label="Matches" value={BARTERS.length} />
+          <Sep />
+          <Strip label="Balance" value="Fair" accent="moss" />
         </div>
       </section>
 
       {/* AI matched */}
-      <section className="px-5 mt-7">
+      <section className="px-5 mt-6">
         <div className="eyebrow">AI-matched for you</div>
-        <div className="space-y-3 mt-3" data-testid="barter-list">
-          {SEED_BARTERS.map((b) => (
+        <div className="mt-3 space-y-3 stagger">
+          {BARTERS.map(b => (
             <button
               key={b.id}
-              data-testid={`barter-card-${b.id}`}
-              onClick={() => nav(`/barter/match/${b.id}`)}
-              className="card-cream p-4 w-full text-left"
+              onClick={() => nav(`/barter/${b.id}`)}
+              data-testid={`barter-${b.id}`}
+              className="card-white w-full text-left"
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <div className="font-display-i text-[17px]" style={{ color: 'var(--ink)' }}>{b.name}</div>
-                  <div className="text-[11.5px]" style={{ color: 'var(--ink2)' }}>Flat {b.flat}</div>
+                  <div className="font-ui" style={{ fontSize: 14.5, fontWeight: 600, color: 'var(--ink)' }}>{b.name}</div>
+                  <div className="font-ui" style={{ fontSize: 11, color: 'var(--ink3)' }}>{b.flat}</div>
                 </div>
-                <span className="pill" style={{ background: 'var(--sand2)', color: SCORE_COLOR[b.matchScore] }}>
+                <span
+                  className="pill"
+                  style={{ background: SCORE_BG[b.matchScore], color: SCORE_FG[b.matchScore], fontWeight: 600, fontSize: 11 }}
+                >
                   {SCORE_LABEL[b.matchScore]}
                 </span>
               </div>
-              <div className="mt-3 grid grid-cols-1 gap-1.5">
-                <Row pillLabel="Offers" pillBg="rgba(90,155,92,0.18)" pillColor="var(--moss)" text={b.offers} />
-                <Row pillLabel="Wants" pillBg="rgba(184,134,11,0.16)" pillColor="var(--gold)" text={b.wants} />
+              <div className="mt-3 space-y-2">
+                <PillRow label="Offers" bg="var(--moss3)" fg="var(--moss)" text={b.offers} />
+                <PillRow label="Wants" bg="var(--gold3)" fg="var(--gold)" text={b.wants} />
               </div>
+              <p className="font-ui mt-3" style={{ fontSize: 11.5, color: 'var(--ink3)' }}>
+                → see how it works
+              </p>
             </button>
           ))}
         </div>
       </section>
 
-      {/* 3-way teaser */}
-      <section className="px-5 mt-6">
+      {/* 3-way */}
+      <section className="px-5 mt-5">
         <div
-          className="card-soft p-4"
-          style={{ borderLeft: '2px solid var(--rust)' }}
-          data-testid="three-way-card"
+          className="card bl-rust"
+          style={{ background: 'var(--rust3)', borderColor: 'var(--rust)' }}
+          data-testid="three-way"
         >
           <div className="flex items-center gap-1.5">
-            <IconSparkles size={13} color="var(--rust)" />
-            <span className="eyebrow" style={{ color: 'var(--rust)' }}>3-way barter</span>
+            <IconArrowsExchange2 size={14} color="var(--rust)" />
+            <span className="font-ui" style={{ fontSize: 13, fontWeight: 600, color: 'var(--rust)' }}>
+              I found a 3-way match
+            </span>
           </div>
-          <p className="mt-1.5 text-[13.5px] font-display-i" style={{ color: 'var(--ink)' }}>
-            "{SEED_3WAY.chain.join(' → ')}. No money. See it?"
+          <p className="font-display-i mt-2" style={{ fontSize: 16, color: 'var(--ink)', lineHeight: 1.3 }}>
+            {THREE_WAY.chain.join(' → ')}. No money changes hands.
           </p>
-          <p className="mt-2 text-[12.5px] font-ui" style={{ color: 'var(--ink2)' }}>
-            {SEED_3WAY.description}
+          <p className="font-ui mt-2" style={{ fontSize: 12, color: 'var(--ink2)' }}>
+            {THREE_WAY.description}
           </p>
-          <button className="btn-rust mt-3 py-2 px-4 text-[13px]" data-testid="see-three-way">See the loop</button>
+          <button className="btn-ghost mt-3" style={{ color: 'var(--rust)', fontSize: 13 }} data-testid="threeway-cta">
+            Show me →
+          </button>
         </div>
       </section>
 
-      {/* Post */}
-      <section className="px-5 mt-6 mb-24">
+      {/* Post your own */}
+      <section className="px-5 mt-5 mb-12">
         <button
-          className="w-full p-5 rounded-[12px] text-[13.5px] font-ui flex items-center justify-center gap-2"
+          data-testid="post-barter"
+          className="w-full font-ui inline-flex items-center justify-center gap-2"
           style={{
-            border: '1px dashed var(--sand3)',
-            color: 'var(--ink2)',
-            background: 'transparent'
+            border: '1.5px dashed var(--sand4)',
+            borderRadius: 'var(--radius)',
+            padding: '18px',
+            fontSize: 13.5, color: 'var(--ink3)', fontWeight: 300
           }}
-          data-testid="post-barter-btn"
         >
-          <IconPlus size={15} /> Post what you offer or need
+          <IconPlus size={15} /> What do you offer? What do you need?
         </button>
-        <Link to="/barter/ledger" data-testid="ledger-link" className="block text-center mt-4 text-[12.5px]" style={{ color: 'var(--rust)' }}>
+        <button
+          onClick={() => nav('/ledger')}
+          data-testid="ledger-link"
+          className="w-full mt-4 font-ui"
+          style={{ fontSize: 12.5, color: 'var(--rust)' }}
+        >
           View coin ledger →
-        </Link>
+        </button>
       </section>
     </div>
   );
 }
 
-const Stat = ({ label, value, accent }) => (
-  <div className="card-cream p-3 text-center">
-    <div className="font-display text-[22px]" style={{ color: accent === 'gold' ? 'var(--gold)' : accent === 'moss' ? 'var(--moss)' : 'var(--ink)' }}>
-      {value}
+function Strip({ label, value, accent }) {
+  const color = accent === 'moss' ? 'var(--moss)' : 'var(--ink)';
+  return (
+    <div className="flex-1 text-center">
+      <div className="font-display" style={{ fontSize: 22, color, lineHeight: 1 }}>{value}</div>
+      <div className="eyebrow mt-1">{label}</div>
     </div>
-    <div className="text-[10px] mt-0.5 uppercase tracking-[0.16em]" style={{ color: 'var(--ink2)' }}>{label}</div>
-  </div>
-);
-
-const Row = ({ pillLabel, pillBg, pillColor, text }) => (
-  <div className="flex items-start gap-2">
-    <span className="pill shrink-0" style={{ background: pillBg, color: pillColor }}>{pillLabel}</span>
-    <span className="text-[13px] pt-0.5" style={{ color: 'var(--ink)' }}>{text}</span>
-  </div>
-);
+  );
+}
+function Sep() {
+  return <div style={{ width: 1, background: 'var(--sand3)', margin: '4px 0' }} />;
+}
+function PillRow({ label, bg, fg, text }) {
+  return (
+    <div className="flex items-start gap-2">
+      <span
+        className="pill shrink-0"
+        style={{ background: bg, color: fg, padding: '3px 10px', fontSize: 10.5, fontWeight: 600 }}
+      >
+        {label}
+      </span>
+      <span className="font-ui" style={{ fontSize: 13, color: 'var(--ink)' }}>{text}</span>
+    </div>
+  );
+}

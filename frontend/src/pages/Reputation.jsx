@@ -1,8 +1,7 @@
 import React from 'react';
-import PageHeader from '../components/PageHeader';
-import GigDashboard from './GigDashboard';
+import Home from './Home';
 
+// Reputation route — for gig users this is essentially their home dashboard
 export default function Reputation() {
-  // Reputation is essentially the gig dashboard with focus on trust
-  return <GigDashboard />;
+  return <Home />;
 }
